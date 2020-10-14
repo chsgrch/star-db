@@ -1,0 +1,28 @@
+.header {
+  color: white;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.header h2 {
+  margin-right: 5rem;
+  margin-bottom: 0;
+}
+
+.header ul {
+  margin: 0;
+}
+
+.header ul li {
+  list-style: none;
+  margin: 0;
+  color: aqua;
+}
+
+.header ul li:hover {
+  cursor: pointer;
+  background-color: #444;
+}
