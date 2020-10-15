@@ -1,0 +1,14 @@
+.error-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 2rem 2rem 2rem;
+  margin: 0 auto;
+}
+.error-indicator__icon {
+  max-width: 200px;
+}
+
+.error-indicator__description_content {
+  font-size: 1.2em;
+}

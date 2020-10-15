@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import swApi from '../../services/swapi-service'
-import Spinner from '../spinner'
+import swApi from "../../services/swapi-service";
+import Spinner from "../spinner";
+import ErrorIndicator from "../error-indicator";
 import "./random-planet.css";
 
 const PlanetView = (props) => {
-  const { id, name, population, rotationPeriod, diameter } = props.planet
+  const { id, name, population, rotationPeriod, diameter } = props.planet;
   return (
     <React.Fragment>
       <div className="random-planet__image-container">
@@ -24,52 +25,74 @@ const PlanetView = (props) => {
         </ul>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
 export default class RandomPlanet extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       planet: {},
-      isLoaded: false
-    }
+      loading: true,
+      error: false,
+    };
     this.updatePlanet();
   }
-  api = new swApi()
+  api = new swApi();
 
   onPlanetLoaded = (planet) => {
     this.setState({
       planet,
-      isLoaded: true
+      loading: false,
+      error: false,
     });
-  }
+  };
 
-  updatePlanet() {
-    let id = Math.floor(Math.random() * 9) + 2;
+  onError = () => {
+    this.setState({
+      error: true,
+      loading: false,
+    });
+  };
 
-    this.api.getPlanet(id)
-      .then(planet => this.onPlanetLoaded(planet))
-  }
-
-  componentDidMount() {
-    setInterval(() => {
-      this.setState({
-        isLoaded: false
+  updatePlanet = () => {
+    let id = Math.floor(Math.random() * 12) + 3;
+    this.api
+      .getPlanet(id)
+      .then((planet) => {
+        this.setState({
+          loading: true,
+          error: false,
+        });
+        this.onPlanetLoaded(planet);
       })
-      this.updatePlanet()
-    }, 3000)
-  }
+      .catch(this.onError);
+  };
+
+  componentDidMount = () => {
+    this.timerIntervalId = setInterval(() => {
+      this.updatePlanet();
+    }, 3000);
+  };
+
+  componentWillUnmount = () => {
+    clearInterval(this.timerIntervalId);
+  };
 
   render() {
-    const { isLoaded, planet } = this.state
+    const { loading, planet, error } = this.state;
+
+    const completeLoad = !(error || loading);
+    const errorPage = error ? <ErrorIndicator /> : null;
+    const planetView = completeLoad ? <PlanetView planet={planet} /> : null; //isLoaded=true && error=fasle
+    const spiner = loading ? (
+      <Spinner className="random-planet__spinner" />
+    ) : null;
     return (
       <div className="random-planet">
-        {
-          isLoaded ?
-            <PlanetView planet={planet} />
-            :
-            <Spinner className='random-planet__spinner' />}
+        {planetView}
+        {spiner}
+        {errorPage}
       </div>
     );
   }
