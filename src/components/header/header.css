@@ -1,10 +1,11 @@
 .header {
   color: white;
-  margin-top: 0.5rem;
+  margin-top: 2rem;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .header h2 {

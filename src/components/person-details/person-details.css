@@ -1,41 +1,37 @@
-.random-planet {
+.person-details {
   background-color: #303030;
-  width: 100%;
-  height: auto;
-  border-radius: 0.3rem;
-  margin-top: 2rem;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
-  flex-wrap: wrap;
+  border-radius: 0.3rem;
+  width: 100%;
+  margin-top: 2rem;
 }
 
-/* --- image --- */
-.random-planet__image-container {
-  max-width: 300px;
+/* --- image ---*/
+.person-details__image-container {
+  max-width: 200px;
   padding: 1.5rem;
 }
-
-.random-planet__image {
+.person-details__image {
   width: 100%;
   height: auto;
-  display: block;
   min-width: 140px;
   border-radius: 0.5rem;
 }
 
-/* --- info --- */
-.random-planet__info {
+/* --- description */
+.person-details__info {
+  width: 100%;
   padding: 1.5rem;
 }
-
-.random-planet__info-description {
+.person-details__person-description {
+  /* display: inline-block; */
   margin-top: 1.5rem;
-  display: inline-block;
+  width: 100%;
 }
-
-.random-planet__info-description li {
+.person-details__person-description li {
   list-style: none;
   margin: 0;
   border-top: 1px solid gray;

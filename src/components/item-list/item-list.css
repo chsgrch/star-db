@@ -1,0 +1,16 @@
+.item-list {
+  margin-top: 2rem;
+  margin-right: 2rem;
+  width: 100%;
+  min-width: 330px;
+}
+
+.item-list li {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.item-list li:hover {
+  cursor: pointer;
+  background-color: #444;
+}
