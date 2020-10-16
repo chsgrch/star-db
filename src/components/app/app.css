@@ -3,14 +3,3 @@
   margin: 0 auto;
   padding: 0 50px;
 }
-
-.sw-info {
-  display: flex;
-  /* flex-wrap: wrap; */
-  /* justify-content: space-between; */
-}
-
-.sw-info__item-list,
-.sw-info__details {
-  /* width: 50%; */
-}

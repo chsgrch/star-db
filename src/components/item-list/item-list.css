@@ -3,6 +3,8 @@
   margin-right: 2rem;
   width: 100%;
   min-width: 330px;
+  display: flex;
+  justify-content: center;
 }
 
 .item-list li {

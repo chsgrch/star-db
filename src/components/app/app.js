@@ -2,8 +2,11 @@ import React, { Component } from "react";
 import Header from "../header";
 import RandomPlanet from "../random-planet";
 import SwapiService from "../../services/swapi-service";
+import ErrorIndicator from '../error-indicator'
+import PeoplePage from '../people-page'
 import ItemList from "../item-list";
 import PersonDetails from "../person-details";
+
 import "./app.css";
 
 const getAllPople = () => {
@@ -30,34 +33,51 @@ const getAllStarships = () => {
 };
 
 export default class App extends Component {
+  state = {
+    hasError: false,
+    idItemList: null
+  }
+  swapiService = new SwapiService();
   componentDidMount() {
     getAllPople();
     getAllPlanets();
     getAllStarships();
   }
-  constructor(props) {
-    super(props);
-    this.state = {
-      details: {},
-    };
+  componentDidCatch() {
+    this.setState({ hasError: true })
   }
 
-  onChangeDetails = (detailsData) => {
-    this.setState({ details: detailsData });
+  onChangeDetails = (id) => {
+    console.log(id)
+    this.setState({ idItemList: id });
   };
 
   render() {
-    const { details } = this.state;
+    const { hasError } = this.state;
+    if (hasError) return <ErrorIndicator />
     return (
       <div className="app">
         <Header />
         <RandomPlanet />
-        <div className="sw-info">
+        <PeoplePage />
+        {/* <PeoplePage /> */}
+        {/* <PeoplePage /> */}
+        <div className="planets-page">
           <ItemList
-            className="sw-info__item-list"
-            changeDetails={(details) => this.onChangeDetails(details)}
+            className="planets-page__item-list"
+            changeDetails={(id) => this.onChangeDetails(id)}
+            getData={this.swapiService.getAllPlanets}
           />
-          <PersonDetails className="sw-info__details" details={details} />
+          <PersonDetails className="planet-page__details" idItemList={this.state.idItemList} />
+        </div>
+
+        <div className="starships-planets">
+          <ItemList
+            className="starships-page__item-list"
+            changeDetails={(id) => this.onChangeDetails(id)}
+            getData={this.swapiService.getAllStarships}
+          />
+          <PersonDetails className="starship-page__details" idItemList={this.state.idItemList} />
         </div>
       </div>
     );

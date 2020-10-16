@@ -1,16 +1,19 @@
 import React, { Component } from "react";
-import SwapiService from "../../services/swapi-service";
+// import SwapiService from "../../services/swapi-service";
+import Spiner from '../spinner'
 import "./item-list.css";
 
 export default class ItemList extends Component {
-  swapiService = new SwapiService();
+  // swapiService = new SwapiService();
   state = {
     items: [],
     error: false,
   };
   componentDidMount() {
-    this.swapiService
-      .getAllPeople()
+    const { getData } = this.props
+    // this.swapiService
+    //   .getAllPeople()
+    getData()
       .then((itemList) => {
         this.setState({
           items: itemList,
@@ -23,19 +26,10 @@ export default class ItemList extends Component {
       error: true,
     });
   };
-  handleChangeDetails = (item) => {
-    const { changeDetails } = this.props;
-    const details = {
-      id: item.id,
-      name: item.name,
-      gender: item.gender,
-      birthYear: item.birthYear,
-      eyeColor: item.eyeColor,
-    };
-    changeDetails(details);
-  };
+
   render() {
     const { items } = this.state;
+    const { changeDetails } = this.props;
 
     const elements = items.map((item) => {
       const key = item.id;
@@ -43,13 +37,20 @@ export default class ItemList extends Component {
         <li
           className="list-group-item"
           key={key}
-          onClick={() => this.handleChangeDetails(item)}
+          onClick={() => changeDetails(key)}
         >
           {item.name} ({item.birthYear})
         </li>
       );
     });
+    const spiner = items.length === 0 ? <Spiner /> : null
+    const itemList = items.length !== 0 ? <ul className="list-group item-list">{elements}</ul> : null
 
-    return <ul className="list-group item-list">{elements}</ul>;
+    return (
+      <React.Fragment>
+        {spiner}
+        {itemList}
+      </React.Fragment>
+    )
   }
 }
