@@ -34,22 +34,17 @@ class ItemDetails extends Component {
     });
   };
 
-  onItemLoaded = (item) => {
-    const { idItemList, getUrl } = this.props;
-    this.setState({
-      item: item,
-      imgUrl: getUrl(idItemList),
-      loading: false,
-      error: false,
-    });
-  };
-
   updateItem = () => {
-    const { idItemList, getData } = this.props;
+    const { idItemList, getData, getUrl } = this.props;
     if (!idItemList) return;
     getData(idItemList)
       .then((item) => {
-        this.onItemLoaded(item);
+        this.setState({
+          item: item,
+          imgUrl: getUrl(idItemList),
+          loading: false,
+          error: false,
+        });
       })
       .catch(() => this.onError());
   };

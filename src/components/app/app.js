@@ -5,6 +5,7 @@ import SwapiService from "../../services/swapi-service";
 import ErrorIndicator from "../error-indicator";
 import Row from "../row";
 import PeoplePage from "../people-page";
+
 import {
   PersonDetails,
   PlanetDetails,
@@ -13,6 +14,7 @@ import {
   PlanetList,
   StarshipList,
 } from "../sw-components/item-lists";
+
 import { SwapiServiceProvider } from "../swapi-service-context";
 import "./app.css";
 
@@ -32,14 +34,6 @@ export default class App extends Component {
   };
 
   render() {
-    const {
-      getPerson,
-      getStarship,
-      getPeopleImage,
-      getStarshipImage,
-    } = this.swapiService;
-
-    // const personList = <PersonList />;
     const planetList = <PlanetList />;
     const starshipList = <StarshipList />;
 

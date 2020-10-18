@@ -19,16 +19,12 @@ export default class PeoplePage extends Component {
     const { idItemList } = this.state;
 
     const itemList = (
-      <PersonList itemSelected={(id) => this.onItemSelected(id)}>
-        {/* {(i) => {
-          return `${i.name} (${i.birthYear})`;
-        }} */}
-      </PersonList>
+      <PersonList itemSelected={(id) => this.onItemSelected(id)}></PersonList>
     );
 
     const details = (
       <ErrorBoundry>
-        <PersonDetails id={idItemList} />
+        <PersonDetails idItemList={idItemList} />
       </ErrorBoundry>
     );
 

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Spiner from "../spinner";
 import ErrorIndicator from "../error-indicator";
 
-const withData = (View, getData) => {
+const withData = (View) => {
   return class extends Component {
     state = {
       items: [],
@@ -18,7 +18,8 @@ const withData = (View, getData) => {
     };
 
     componentDidMount() {
-      getData()
+      this.props
+        .getData()
         .then((itemList) => {
           this.setState({
             items: itemList,
