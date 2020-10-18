@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import SwapiService from "../../services/swapi-service";
-import Spiner from "../spinner";
 import ErrorButton from "../error-button";
 import Row from "../row";
-import "./item-details.css";
+import Spinner from "../spinner";
 import ErrorBoundry from "../error-boundry";
+import ErrorIndicator from "../error-indicator";
+import "./item-details.css";
 
 const Record = ({ item, field, label }) => {
   return (
@@ -20,20 +21,37 @@ class ItemDetails extends Component {
   state = {
     item: null,
     imgUrl: null,
+    loading: true,
+    error: false,
   };
+
   swapiServiceApi = new SwapiService();
 
-  updateItem = () => {
-    const { idItemList, getData, getUrl } = this.props;
-    if (!idItemList) return;
-
-    getData(idItemList).then((item) => {
-      console.log("Item", item);
-      this.setState({
-        item: item,
-        imgUrl: getUrl(idItemList),
-      });
+  onError = () => {
+    this.setState({
+      loading: false,
+      error: true,
     });
+  };
+
+  onItemLoaded = (item) => {
+    const { idItemList, getUrl } = this.props;
+    this.setState({
+      item: item,
+      imgUrl: getUrl(idItemList),
+      loading: false,
+      error: false,
+    });
+  };
+
+  updateItem = () => {
+    const { idItemList, getData } = this.props;
+    if (!idItemList) return;
+    getData(idItemList)
+      .then((item) => {
+        this.onItemLoaded(item);
+      })
+      .catch(() => this.onError());
   };
 
   componentDidMount = () => {
@@ -41,22 +59,22 @@ class ItemDetails extends Component {
   };
 
   componentDidUpdate = (prevProps) => {
+    console.log("UPDATE");
     if (prevProps.idItemList !== this.props.idItemList) {
+      this.setState({
+        loading: true,
+        error: false,
+      });
       this.updateItem();
     }
   };
 
   render() {
-    const { item, imgUrl } = this.state;
+    const { item, imgUrl, error, loading } = this.state;
 
-    const spiner = !item ? (
-      <div className="item-details__default">
-        <h3>Select one item from list</h3>
-        <Spiner className="spiner" />
-      </div>
-    ) : null;
+    const completeLoad = !(error || loading);
 
-    const itemData = item ? (
+    const itemData = completeLoad ? (
       <ItemData
         item={item}
         url={imgUrl}
@@ -66,11 +84,16 @@ class ItemDetails extends Component {
       />
     ) : null;
 
+    const spiner = loading ? <Spinner className="spiner" /> : null;
+
+    const hasError = error ? <ErrorIndicator /> : null;
+
     return (
       <ErrorBoundry>
         <div className="card row item-details">
-          {spiner}
           {itemData}
+          {spiner}
+          {hasError}
         </div>
       </ErrorBoundry>
     );

@@ -11,7 +11,6 @@ const withData = (View, getData) => {
     };
 
     onError = () => {
-      console.log("!!!onError = () ");
       this.setState({
         error: true,
         loading: false,
@@ -27,7 +26,7 @@ const withData = (View, getData) => {
             error: false,
           });
         })
-        .catch(this.onError());
+        .catch(() => this.onError());
     }
 
     render() {
