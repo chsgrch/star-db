@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Spiner from "../spinner";
 import ErrorIndicator from "../error-indicator";
+import PropTypes from 'prop-types'
 
 const withData = (View) => {
   return class extends Component {
@@ -17,7 +18,7 @@ const withData = (View) => {
       });
     };
 
-    componentDidMount() {
+    update = () => {
       this.props
         .getData()
         .then((itemList) => {
@@ -28,6 +29,16 @@ const withData = (View) => {
           });
         })
         .catch(() => this.onError());
+    }
+
+    componentDidMount() {
+      this.update()
+    }
+
+    componentDidUpdate = (prevProps) => {
+      if (prevProps.getData !== this.props.getData) {
+        this.update()
+      }
     }
 
     render() {
@@ -49,6 +60,9 @@ const withData = (View) => {
           {errorPage}
         </div>
       );
+    }
+    static propTypes = {
+      getData: PropTypes.func
     }
   };
 };

@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import swApi from "../../services/swapi-service";
 import Spinner from "../spinner";
 import ErrorIndicator from "../error-indicator";
 import "./random-planet.css";
+import { withSwapiService } from '../hoc-helpers'
+import PropTypes from 'prop-types'
 
 const PlanetView = (props) => {
   const { id, name, population, rotationPeriod, diameter } = props.planet;
@@ -28,7 +29,7 @@ const PlanetView = (props) => {
   );
 };
 
-export default class RandomPlanet extends Component {
+class RandomPlanet extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,7 +39,6 @@ export default class RandomPlanet extends Component {
     };
     this.updatePlanet();
   }
-  api = new swApi();
 
   onPlanetLoaded = (planet) => {
     this.setState({
@@ -57,7 +57,7 @@ export default class RandomPlanet extends Component {
 
   updatePlanet = () => {
     let id = Math.floor(Math.random() * 12) + 3;
-    this.api
+    this.props
       .getPlanet(id)
       .then((planet) => {
         this.setState({
@@ -70,9 +70,10 @@ export default class RandomPlanet extends Component {
   };
 
   componentDidMount = () => {
+    const { updateInterval } = this.props
     this.timerIntervalId = setInterval(() => {
       this.updatePlanet();
-    }, 30000);
+    }, updateInterval);
   };
 
   componentWillUnmount = () => {
@@ -96,4 +97,33 @@ export default class RandomPlanet extends Component {
       </div>
     );
   }
+  static defaultProps = {
+    updateInterval: 10000,
+    getPlanet: () => new Promise((resolve, reject) => {
+      resolve({})
+    })
+  }
+
+  // static propTypes = {
+  //   updateInterval: (props, propName, componentName) => {
+  //     const value = props[propName]
+  //     if (typeof value === 'number' && !isNaN(value)) {
+  //       return null;
+  //     }
+  //     return new TypeError(`Type error in component ${componentName} with props ${propName} must be a number`)
+  //   }
+  // }
+
+  static propTypes = {
+    updateInterval: PropTypes.number,
+    getPlanet: PropTypes.func
+  }
 }
+
+const mapMethodsToProps = (swapiService) => {
+  return {
+    getPlanet: swapiService.getPlanet
+  }
+}
+
+export default withSwapiService(mapMethodsToProps)(RandomPlanet) //RandomPlanet

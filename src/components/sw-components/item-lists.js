@@ -2,16 +2,7 @@ import React from "react";
 import ItemListComponent from "../item-list";
 import { withData } from "../hoc-helpers";
 import { withSwapiService } from "../hoc-helpers";
-
-import SwapiService from "../../services/swapi-service";
-
-const { getAllPlanets, getAllPeople, getAllStarships } = new SwapiService();
-
-const withChildFunction = (Wrapped, fn) => {
-  return (props) => {
-    return <Wrapped {...props}>{fn}</Wrapped>;
-  };
-};
+import { withChildFunction } from '../hoc-helpers'
 
 const renderLabelName = (item) => {
   return (
@@ -37,19 +28,6 @@ const renderLabelStarship = (item) => {
   );
 };
 
-const ListWithChildrenPersons = withChildFunction(
-  ItemListComponent,
-  renderLabelName
-);
-const ListWithChildrenPlanets = withChildFunction(
-  ItemListComponent,
-  renderLabelPlanet
-);
-const ListWithChildStarships = withChildFunction(
-  ItemListComponent,
-  renderLabelStarship
-);
-
 const mapPersonsMethodsToProps = (swapiService) => {
   return { getData: swapiService.getAllPeople };
 };
@@ -57,20 +35,22 @@ const mapPlanetsMethodsToProps = (swapiService) => {
   return { getData: swapiService.getAllPlanets };
 };
 const mapStarshipsMethodsToProps = (swapiService) => {
-  return { getData: swapiService.getAllPeople };
+  return { getData: swapiService.getAllStarships };
 };
 
-const PersonList = withSwapiService(
-  withData(ListWithChildrenPersons),
-  mapPersonsMethodsToProps
-);
-const PlanetList = withSwapiService(
-  withData(ListWithChildrenPlanets),
-  mapPlanetsMethodsToProps
-);
-const StarshipList = withSwapiService(
-  withData(ListWithChildStarships),
-  mapStarshipsMethodsToProps
-);
+
+const PersonList = withSwapiService(mapPersonsMethodsToProps)(
+  withData(
+    withChildFunction(renderLabelName)(
+      ItemListComponent)))
+
+const PlanetList = withSwapiService(mapPlanetsMethodsToProps)(
+  withData(
+    withChildFunction(renderLabelPlanet)(
+      ItemListComponent)))
+
+const StarshipList = withSwapiService(mapStarshipsMethodsToProps)(
+  withData(withChildFunction(renderLabelStarship)(
+    ItemListComponent)))
 
 export { PersonList, PlanetList, StarshipList };

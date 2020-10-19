@@ -6,6 +6,7 @@ import Spinner from "../spinner";
 import ErrorBoundry from "../error-boundry";
 import ErrorIndicator from "../error-indicator";
 import "./item-details.css";
+import PropTypes from 'prop-types'
 
 const Record = ({ item, field, label }) => {
   return (
@@ -18,6 +19,13 @@ const Record = ({ item, field, label }) => {
 export { Record };
 
 class ItemDetails extends Component {
+
+  static propTypes = {
+    idItemList: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    getData: PropTypes.func,
+    getUrl: PropTypes.func
+  }
+
   state = {
     item: null,
     imgUrl: null,
@@ -54,8 +62,8 @@ class ItemDetails extends Component {
   };
 
   componentDidUpdate = (prevProps) => {
-    console.log("UPDATE");
-    if (prevProps.idItemList !== this.props.idItemList) {
+    if (prevProps.idItemList !== this.props.idItemList ||
+      prevProps.getData !== this.props.getData) {
       this.setState({
         loading: true,
         error: false,
@@ -109,5 +117,11 @@ const ItemData = (props) => {
   );
   return <Row left={img} right={body} />;
 };
+
+ItemData.propTypes = {
+  item: PropTypes.object,
+  url: PropTypes.string,
+  chData: PropTypes.node
+}
 
 export default ItemDetails;

@@ -1,20 +1,10 @@
-import React, { Component } from "react";
-import Header from "../header";
-import RandomPlanet from "../random-planet";
-import SwapiService from "../../services/swapi-service";
+import DummySwapiService from '../../services/dummy-swapi-service'
 import ErrorIndicator from "../error-indicator";
-import Row from "../row";
-import PeoplePage from "../people-page";
-
-import {
-  PersonDetails,
-  PlanetDetails,
-  StarshipDetails,
-  PersonList,
-  PlanetList,
-  StarshipList,
-} from "../sw-components/item-lists";
-
+import Header from "../header";
+import { PeoplePage, PlanetPage, StarshipPage } from '../pages'
+import RandomPlanet from "../random-planet";
+import React, { Component } from "react";
+import SwapiService from "../../services/swapi-service";
 import { SwapiServiceProvider } from "../swapi-service-context";
 import "./app.css";
 
@@ -22,8 +12,9 @@ export default class App extends Component {
   state = {
     hasError: false,
     idItemList: null,
+    swapiService: new SwapiService()
   };
-  swapiService = new SwapiService();
+
   componentDidCatch() {
     this.setState({ hasError: true });
   }
@@ -33,20 +24,27 @@ export default class App extends Component {
     this.setState({ idItemList: id });
   };
 
+  onHandleChangeSource = () => {
+    this.setState(({ swapiService }) => {
+      const currentDataSource = swapiService instanceof SwapiService ? DummySwapiService : SwapiService
+      return {
+        swapiService: new currentDataSource()
+      }
+    })
+  }
+
   render() {
-    const planetList = <PlanetList />;
-    const starshipList = <StarshipList />;
-
     const { hasError } = this.state;
-
     if (hasError) return <ErrorIndicator />;
     return (
-      <SwapiServiceProvider value={this.swapiService}>
+      <SwapiServiceProvider value={this.state.swapiService}>
         <div className="app">
-          <Header />
+          <Header handleChangeSource={() => this.onHandleChangeSource} />
           <RandomPlanet />
+          {/* updateInterval={30000} */}
           <PeoplePage />
-          <Row left={planetList} right={starshipList} />
+          <PlanetPage />
+          <StarshipPage />
         </div>
       </SwapiServiceProvider>
     );

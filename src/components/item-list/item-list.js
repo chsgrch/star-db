@@ -1,5 +1,6 @@
 import React from "react";
 import "./item-list.css";
+import PropTypes from 'prop-types'
 
 const ItemListComponent = (props) => {
   const renderItems = () => {
@@ -27,5 +28,15 @@ const ItemListComponent = (props) => {
 
   return <div className="row mb2">{itemList}</div>;
 };
+
+ItemListComponent.defaultProps = {
+  itemSelected: () => { }
+}
+
+ItemListComponent.propTypes = {
+  itemSelected: PropTypes.func,
+  data: PropTypes.arrayOf(PropTypes.object),
+  children: PropTypes.func
+}
 
 export default ItemListComponent;
