@@ -8,6 +8,15 @@
   flex-wrap: wrap;
 }
 
+.header__head-text a {
+  text-decoration: none;
+}
+
+.header__head-text:hover {
+  color: aqua;
+  cursor: pointer;
+}
+
 .header h2 {
   margin-right: 5rem;
   margin-bottom: 0;
@@ -21,6 +30,10 @@
   list-style: none;
   margin: 0;
   color: aqua;
+}
+
+.header ul li a {
+  text-decoration: none;
 }
 
 .header ul li:hover {

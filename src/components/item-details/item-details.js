@@ -93,7 +93,7 @@ class ItemDetails extends Component {
 
     return (
       <ErrorBoundry>
-        <div className="card row item-details">
+        <div className="card flex-row mr-0 ml-0 item-details">
           {itemData}
           {spiner}
           {hasError}
@@ -105,7 +105,7 @@ class ItemDetails extends Component {
 
 const ItemData = (props) => {
   const { item, url, chData } = props;
-  const img = <img className="item-details__image" src={url} alt="item" />;
+  const img = <img className="col-md-12" src={url} alt="item" />;
   const body = (
     <div className="card-body item-details__info">
       <h4 className="item-details__item-name">{item.name}</h4>

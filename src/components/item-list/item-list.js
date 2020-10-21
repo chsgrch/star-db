@@ -26,7 +26,7 @@ const ItemListComponent = (props) => {
 
   const itemList = renderItems();
 
-  return <div className="row mb2">{itemList}</div>;
+  return <div className="row mb2 mr-0 ml-0">{itemList}</div>;
 };
 
 ItemListComponent.defaultProps = {
