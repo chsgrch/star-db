@@ -13,11 +13,10 @@ import React, { Component } from "react";
 import SwapiService from "../../services/swapi-service";
 import { SwapiServiceProvider } from "../swapi-service-context";
 import "./app.css";
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import StarshipDetails from '../sw-components/starship-details'
 
 import '../../resources/css/bootstrap.min.css'
-// import planetDetails from '../sw-components/planet-details';
 
 export default class App extends Component {
   state = {
@@ -58,48 +57,52 @@ export default class App extends Component {
             <RandomPlanet />
             {/* updateInterval={30000} */}
 
-            <Route path='/'
-              exact
-              render={() => <h2>Welcome to SrarDB</h2>}
-            />
+            <Switch>
+              <Route path='/'
+                exact
+                render={() => <h2>Welcome to SrarDB</h2>}
+              />
 
-            {/* Change list elements with use router (list and details on single page) */}
-            <Route path='/person/:id?'
-              exact
-              component={PeoplePage} />
+              {/* Change list elements with use router (list and details on single page) */}
+              <Route path='/person/:id?'
+                exact
+                component={PeoplePage} />
 
-            {/* Change list elements without react router */}
-            <Route path='/planets'
-              exact
-              component={PlanetPage} />
+              {/* Change list elements without react router */}
+              <Route path='/planets'
+                exact
+                component={PlanetPage} />
 
-            {/* Change list elements with use router (list and details on different pages) */}
-            <Route path='/starships'
-              exact
-              component={StarshipPage}
-            />
-            <Route path="/starships/:id"
-              render={({ match, location, history }) => {
-                const { id } = match.params;
-                return <StarshipDetails idItemList={id} />
-              }} />
+              {/* Change list elements with use router (list and details on different pages) */}
+              <Route path='/starships'
+                exact
+                component={StarshipPage}
+              />
+              <Route path="/starships/:id"
+                render={({ match, location, history }) => {
+                  const { id } = match.params;
+                  return <StarshipDetails idItemList={id} />
+                }} />
 
-            <Route
-              path='/login'
-              render={() => {
-                return <LoginPage
-                  isLoggedIn={isLoggedIn}
-                  onLogin={this.onLogin}
-                />
-              }} />
-            <Route
-              path='/secret'
-              render={() => {
-                return <SecretPage
-                  isLoggedIn={isLoggedIn}
-                />
-              }}
-            />
+              <Route
+                path='/login'
+                render={() => {
+                  return <LoginPage
+                    isLoggedIn={isLoggedIn}
+                    onLogin={this.onLogin}
+                  />
+                }} />
+              <Route
+                path='/secret'
+                render={() => {
+                  return <SecretPage
+                    isLoggedIn={isLoggedIn}
+                  />
+                }}
+              />
+              {/* <Redirect to='/' /> */}
+              <Route render={() => { return <h2>Page not found</h2> }} />
+            </Switch>
 
           </div>
         </Router>
